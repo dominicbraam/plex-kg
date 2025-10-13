@@ -1,0 +1,26 @@
+# using schema.org since they have relevant schemas for this project
+@prefix schema: <https://schema.org/> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@base <http://localhost:3030/resource/> .
+
+<movie/Inception> a schema:Movie;
+    schema:name "Inception";
+    schema:genre <genre/sci-fi>;
+    schema:datePublished "2025-01-01";
+    schema:director <person/ChristopherNolan>.
+
+<tvseries/GOT> a schema:TVSeries;
+    schema:name "Game of Thrones";
+    schema:genre <genre/sci-fi>.
+
+<tvseries/GOT/ep1> a schema:TVEpisode;
+    schema:partPfTVSeries <tvseries/GOT>;
+    schema:name "Episode 1";
+    schema:director <person/Sucky>;
+    schema:datePublished "2025-01-01".
+
+<person/Sucky> a schema:Person.
+<person/ChristopherNolan> a schema:Person.
+
+<genre/SciFi> a schema:genre.
