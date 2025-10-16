@@ -4,23 +4,45 @@
 @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
 @base <http://localhost:3030/resource/> .
 
-<movie/Inception> a schema:Movie;
-    schema:name "Inception";
-    schema:genre <genre/sci-fi>;
-    schema:datePublished "2025-01-01";
-    schema:director <person/ChristopherNolan>.
+<genre/action> a schema:genre ;
+    schema:name "Action"@en .
+
+<genre/science-fiction> a schema:genre ;
+    schema:name "Science Fiction"@en .
+
+<person/plex-watcher> a schema:Person ;
+    schema:name "Plex Watcher"@en .
+
+<person/ChristopherNolan> a schema:Person ;
+    schema:name "Christopher Nolan"@en .
+
+<movie/iron-man-2> a schema:Movie ;
+    schema:name "Iron Man 2"@en ;
+    schema:genre <genre/action>,
+        <genre/adventure> ;
+    schema:duration "7474643"^^xsd:duration ;
+    schema:director <person/jon-favreau> ;
+    schema:datePublished "2010-04-28"^^xsd:date ;
+    schema:contentRating [ a schema:Rating ;
+            schema:ratingValue 7.2 ],
+        "PG-13" ;
+    schema:author <person/don-heck>,
+        <person/justin-theroux> ;
+    schema:actor <person/don-cheadle>,
+        <person/gwyneth-paltrow>,
+        <person/robert-downey-jr> .
 
 <tvseries/GOT> a schema:TVSeries;
-    schema:name "Game of Thrones";
+    schema:name "Game of Thrones"@en;
     schema:genre <genre/sci-fi>.
 
 <tvseries/GOT/ep1> a schema:TVEpisode;
-    schema:partPfTVSeries <tvseries/GOT>;
-    schema:name "Episode 1";
-    schema:director <person/Sucky>;
-    schema:datePublished "2025-01-01".
+    schema:partOfTVSeries <tvseries/GOT>;
+    schema:name "Episode 1"@en;
+    schema:director <person/plex-watcher>;
+    schema:datePublished "2025-01-01"^^xsd:date.
 
-<person/Sucky> a schema:Person.
-<person/ChristopherNolan> a schema:Person.
-
-<genre/SciFi> a schema:genre.
+<history/status/sessions/history/1058> a schema:WatchAction ;
+    schema:agent <person/plex-watcher> ;
+    schema:object <movie/iron-man-2> ;
+    schema:startTime "2022-12-25"^^xsd:date .

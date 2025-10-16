@@ -36,6 +36,14 @@ URLs:
 - `http://localhost:3030/` - Fuseki
 - `http://localhost:8000/` - FastAPI
 
+## Limitations
+
+To reduce the project's complexity, the media is limited to a single Plex section and a single user. Note: Movies and TV Shows can be considered Plex sections. The project was developed and tested using only movies so the other sections might not even work.
+
+If you would like to see the available Plex sections, you can use the FastAPI endpoint `/library`, "Get Plex Libraries". I know... confusing names but that's Plex naming scheme. The section ID is called "key" in the dataset.
+
+Another major limitation is that I did not implement any error handling... 😅 I just didn't feel like, lol. You can check docker logs to help clear any blockers you might have.
+
 ## Resources
 
 - [Plex Media Server API](https://developer.plex.tv/)

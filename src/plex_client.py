@@ -46,12 +46,11 @@ class PlexClient:
             "type",
             "title",
             "contentRating",
-            # "rating",
-            # "audienceRating",
-            # "viewCount",
-            # "lastViewedAt",
-            # "year",
-            # "duration",
+            "rating",
+            "viewCount",
+            "lastViewedAt",
+            "originallyAvailableAt",
+            "duration",
             "Genre",
             "Director",
             "Writer",
@@ -59,7 +58,7 @@ class PlexClient:
         ]
 
     def create_structured_datasets(
-        self,
+        self, section_id: int, account_id: int
     ) -> (pd.DataFrame, pd.DataFrame, pd.DataFrame):
         """
         Filter properties using the 'properties' property defined in this
@@ -71,14 +70,20 @@ class PlexClient:
         dataset to use the slugs - this is to make it easier to create
         properties in rdf because the slugs will act as IDs.
 
+        Args:
+            section_id: int
+
         Returns:
             tuple(genres, persons, all_data)
         """
-        section_data = self._get_section_items(1)
-        metadata = section_data["MediaContainer"]["Metadata"]
+        section_data = self._get_section_items(section_id)
+        section_metadata = section_data["MediaContainer"]["Metadata"]
 
         structured_df = pd.DataFrame(
-            [{c: item.get(c) for c in self.properties} for item in metadata]
+            [
+                {c: item.get(c) for c in self.properties}
+                for item in section_metadata
+            ]
         )
 
         genre_df = self._property_unique_values(structured_df, ["Genre"])
@@ -102,7 +107,14 @@ class PlexClient:
             lambda x: self._map_property_slugs(x, person_df)
         )
 
-        return genre_df, person_df, structured_df
+        history_data = self._get_playback_history(section_id, account_id)
+        history_df = pd.DataFrame(history_data["MediaContainer"]["Metadata"])
+        # Add the slugs to the history df
+        history_df = history_df.merge(
+            structured_df[["title", "slug"]], on="title", how="left"
+        )
+
+        return genre_df, person_df, structured_df, history_df
 
     def _get(self, path: str) -> pd.DataFrame:
         """
@@ -124,8 +136,17 @@ class PlexClient:
     def _get_libraries(self):
         return self._get("/library/sections")
 
+    # turns out that /all gets all movie data and:
+    #   - /library/sections/{section_key}/genre -> all genres in section
+    #   - /library/sections/{section_key}/director -> all directors in section
+    #   - etc.
     def _get_section_items(self, section_key):
         return self._get(f"/library/sections/{section_key}/all")
+
+    def _get_playback_history(self, section_id: int, account_id: int):
+        return self._get(
+            f"/status/sessions/history/all?librarySectionID={section_id}&accountID={account_id}"
+        )
 
     def _map_property_slugs(
         self, property_vals: pd.DataFrame, property_unique_df: pd.DataFrame
