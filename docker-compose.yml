@@ -1,11 +1,21 @@
 services:
     fuseki:
         image: stain/jena-fuseki
-        container_name: fuseki
-        user: 0:0 # only giving access to mounted volumes as root 🙄
+        container_name: plex-kg-fuseki
         ports:
             - 3030:3030
         environment:
             - ADMIN_PASSWORD=admin
         volumes:
-            - ./data/fuseki:/fuseki
+            - ./data/logs:/fuseki/logs
+            - ./data/databases:/fuseki/databases
+
+    python:
+        build:
+            context: .
+        container_name: plex-kg-app
+        ports:
+            - 8000:8000
+        env_file: .env
+        volumes:
+            - ./src:/app/src

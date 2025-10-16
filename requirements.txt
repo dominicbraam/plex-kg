@@ -1,0 +1,6 @@
+fastapi==0.119.0
+pandas==2.3.3
+plex-api-client==0.31.1
+rdflib==7.2.1
+requests==2.32.5
+uvicorn[standard]==0.37.0
