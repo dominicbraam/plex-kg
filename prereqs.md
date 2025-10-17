@@ -40,14 +40,14 @@ The ultimate ambition of the Semantic Web, as its founder **Tim Berners-Lee** se
 - Written in XML. The XML language used by RDF is called RDF/XML.
 - Uses Web identifiers (URIs) to identify resources.
 - Describes resources with properties and property values.
-    - A **resource** is anything that can have a URI, such as "https://www.w3schools.com/rdf"
-    - A **property** is a resource that has a name, such as "author" or "homepage"
-    - A **property** value is the value of a property, such as "Jan Egil Refsnes" or "https://www.w3schools.com" (note that a property value can be another resource)
+    - A **resource** is anything that can have a URI, such as `https://www.w3schools.com/rdf`.
+    - A **property** is a resource that has a name, such as "author" or "homepage".
+    - A **property** value is the value of a property, such as "Jan Egil Refsnes" or `https://www.w3schools.com` (note that a property value can be another resource)
 - The combination of a resource, a property, and a property value forms a **statement** (known as the subject, predicate, and object of a statement) - **aka. a Triple**.
-    - **Statement:** "The homepage of https://www.w3schools.com/rdf is https://www.w3schools.com".
-        - **Subject:** https://www.w3schools.com/rdf
+    - **Statement:** "The homepage of `https://www.w3schools.com/rdf` is `https://www.w3schools.com`".
+        - **Subject:** `https://www.w3schools.com/rdf`
         - **Predicate:** homepage
-        - **Object:** https://www.w3schools.com
+        - **Object:** `https://www.w3schools.com`
 - Use the [online converter](https://www.easyrdf.org/converter) to convert/validate your RDF files.
 
 **Languages/Syntax:**

@@ -4,10 +4,10 @@ Plex KG transforms Plex media data into a connected web of knowledge, showing ho
 
 ## Tools
 
-- PlexAPI: collect Plex data.
-- rdflib: extract/map Plex data to turtle only. Doesn't handle large graphs well because it runs in memory.
-- Fuseki: handle RDF storage, query and reasoning.
-- FastAPI: easily access user facing functions.
+- **PlexAPI**: collect Plex data.
+- **rdflib**: extract/map Plex data to turtle only. Doesn't handle large graphs well because it runs in memory.
+- **Fuseki**: handle RDF storage, query and reasoning.
+- **FastAPI**: easily access user facing functions.
 
 ## Data Flow
 
@@ -65,3 +65,6 @@ Another major limitation is that I did not implement any error handling... 😅 
 
 - [Plex Media Server API](https://developer.plex.tv/)
 - [rdflib Docs](https://rdflib.readthedocs.io/en/stable/)
+
+> [!NOTE]
+> Check out `prereqs.md` for some key points on Semantic Web.

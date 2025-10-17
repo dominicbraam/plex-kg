@@ -7,7 +7,6 @@ services:
         environment:
             - ADMIN_PASSWORD=admin
         volumes:
-            - ./data/logs:/fuseki/logs
             - ./data/databases:/fuseki/databases
 
     python:
