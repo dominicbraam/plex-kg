@@ -1,5 +1,7 @@
 import pandas as pd
 from datetime import datetime, timezone
+from decimal import Decimal
+from pyshacl import validate
 from rdflib import BNode, Graph, Literal, URIRef
 from rdflib.namespace import RDF, RDFS, SDO, XSD
 
@@ -59,7 +61,11 @@ class PlexRDFHandler:
         for _, watch_action in history_data.iterrows():
             self._add_watch_action_entry(watch_action)
 
-        return self.g.serialize(format="turtle")
+        conforms, report_graph = self._validate_graph()
+
+        if not conforms:
+            return conforms, report_graph.serialize(format="turtle")
+        return conforms, self.g.serialize(format="turtle")
 
     def _genre_uri(self, slug) -> str:
         return URIRef(f"genre/{slug}")
@@ -98,7 +104,7 @@ class PlexRDFHandler:
         person = self._person_uri(slug)
 
         self.g.add((person, RDF.type, SDO.Person))
-        self.g.add((person, SDO.name, Literal(name, lang="en")))
+        self.g.add((person, SDO.name, Literal(name)))
 
     def _add_movie_entry(self, movie_data: pd.Series) -> None:
         """
@@ -115,7 +121,7 @@ class PlexRDFHandler:
 
         slug = movie_data["slug"]
         title = movie_data["title"]
-        contentRating = movie_data["contentRating"]
+        # contentRating = movie_data["contentRating"]
         rating = movie_data["rating"]
         date_published = movie_data["originallyAvailableAt"]
         duration = movie_data["duration"]
@@ -136,22 +142,30 @@ class PlexRDFHandler:
             )
         )
         self.g.add(
-            (movie, SDO.duration, Literal(duration, datatype=XSD.duration))
+            (movie, SDO.duration, Literal(duration, datatype=XSD.integer))
         )
 
         # Ratings
-        self.g.add((movie, SDO.contentRating, Literal(contentRating)))
-        rating_node = BNode()
-        self.g.add((rating_node, RDF.type, SDO.Rating))
-        self.g.add(
-            (
-                rating_node,
-                SDO.ratingValue,
-                Literal(rating, datatype=XSD.decimal),
-            )
-        )
+        # self.g.add(
+        #     (
+        #         movie,
+        #         SDO.contentRating,
+        #         Literal(contentRating, datatype=XSD.string),
+        #     )
+        # )
 
-        self.g.add((movie, SDO.contentRating, rating_node))
+        # Don't try adding nodes with empty values
+        if pd.notna(rating):
+            rating_node = BNode()
+            self.g.add((rating_node, RDF.type, SDO.Rating))
+            self.g.add(
+                (
+                    rating_node,
+                    SDO.ratingValue,
+                    Literal(round(Decimal(rating), 1), datatype=XSD.decimal),
+                )
+            )
+            self.g.add((movie, SDO.contentRating, rating_node))
 
         # Persons
         for slug in genre_slugs:
@@ -191,3 +205,19 @@ class PlexRDFHandler:
                 Literal(viewed_at, datatype=XSD.date),
             )
         )
+
+    def _validate_graph(self) -> (bool, str):
+        file_path = "/app/rdf/shape.ttl"
+        shacl_graph = Graph().parse(file_path, format="turtle")
+
+        conforms, report_graph, report_text = validate(
+            data_graph=self.g,
+            shacl_graph=shacl_graph,
+            inference="rdfs",
+            abort_on_first=False,
+            meta_shacl=False,
+            advanced=True,
+            debug=False,
+        )
+
+        return conforms, report_graph

@@ -1,0 +1,12 @@
+PREFIX : <https://schema.org/>
+BASE <http://plex-kg/>
+
+SELECT ?movie ?watch_date
+WHERE {
+    ?movie a :Movie .
+    ?watch_action a :WatchAction ;
+        :object ?movie ;
+        :startTime ?watch_date .
+}
+ORDER BY DESC(?watch_date)
+LIMIT 1

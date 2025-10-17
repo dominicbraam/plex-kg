@@ -2,7 +2,7 @@
 @prefix schema: <https://schema.org/> .
 @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
 @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
-@base <http://localhost:3030/resource/> .
+@base <http://plex-kg/> .
 
 <genre/action> a schema:genre ;
     schema:name "Action"@en .
@@ -24,8 +24,7 @@
     schema:director <person/jon-favreau> ;
     schema:datePublished "2010-04-28"^^xsd:date ;
     schema:contentRating [ a schema:Rating ;
-            schema:ratingValue 7.2 ],
-        "PG-13" ;
+            schema:ratingValue 7.2 ] ;
     schema:author <person/don-heck>,
         <person/justin-theroux> ;
     schema:actor <person/don-cheadle>,

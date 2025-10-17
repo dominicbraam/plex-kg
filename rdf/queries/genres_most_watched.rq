@@ -1,0 +1,12 @@
+PREFIX : <https://schema.org/>
+BASE <http://plex-kg/>
+
+SELECT ?genre (COUNT(?watch_action) AS ?watch_count)
+WHERE {
+    ?watch_action a :WatchAction ;
+            :object ?movie .
+    ?movie :genre ?genre .
+}
+GROUP BY ?genre
+ORDER BY DESC(?watch_count)
+LIMIT 10

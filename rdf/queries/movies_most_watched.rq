@@ -1,0 +1,16 @@
+PREFIX : <https://schema.org/>
+BASE <http://plex-kg/>
+
+SELECT ?movie (COUNT(?watch_date) as ?watch_count) ?rating
+WHERE {
+    ?movie a :Movie .
+
+    ?watch_action a :WatchAction ;
+        :object ?movie ;
+        :startTime ?watch_date .
+
+    OPTIONAL { ?movie :contentRating/:ratingValue ?rating . }
+}
+GROUP BY ?movie ?rating
+ORDER BY DESC(?watch_count) DESC(?rating)
+LIMIT 1

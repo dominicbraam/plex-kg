@@ -9,6 +9,12 @@ Plex KG transforms Plex media data into a connected web of knowledge, showing ho
 - Fuseki: handle RDF storage, query and reasoning.
 - FastAPI: easily access user facing functions.
 
+## Data Flow
+
+1. Get data from Plex.
+2. Transform Plex data to a graph in the Turtle format.
+3. Validate graph against expected shape: `./rdf/shape.ttl`.
+
 ## Setup
 
 Developed on Python 3.12.
@@ -31,10 +37,21 @@ chown -R 100:100 ./fuseki-data/*
 docker compose up
 ```
 
-URLs:
+**URLs:**
 
 - `http://localhost:3030/` - Fuseki
 - `http://localhost:8000/` - FastAPI
+
+**Run queries using fuseki API:**
+
+```bash
+curl POST \
+    --data-urlencode "query@{path-to-rq-file}" \
+    http://localhost:3030/{dataset-name}/query | jq
+```
+
+- If it's saying unauthorized, use curl's -u parameter: `curl -u user:pw ...`
+- If you get an error saying that the URL doesn't support POST requests, ensure that the dataset name is correct.
 
 ## Limitations
 

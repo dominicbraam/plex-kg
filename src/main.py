@@ -1,4 +1,5 @@
-from fastapi import FastAPI
+import traceback
+from fastapi import FastAPI, HTTPException
 from fastapi.responses import Response
 from plex_client import PlexClient
 from rdf_handler import PlexRDFHandler
@@ -13,7 +14,8 @@ def download_rdf_file(section_id: int, account_id: int):
     graph in the format of RDF.
 
     Args:
-        section_id: id
+        section_id: int
+        account_id: int
 
     Returns:
         Response: .ttl file
@@ -24,14 +26,30 @@ def download_rdf_file(section_id: int, account_id: int):
     )
 
     rdf_handler = PlexRDFHandler()
-    turtle_data = rdf_handler.to_ttl(
-        genres_df, person_df, all_movie_df, history_df
-    )
+
+    try:
+        conforms, turtle_data = rdf_handler.to_ttl(
+            genres_df, person_df, all_movie_df, history_df
+        )
+    except Exception as e:
+        error_details = traceback.format_exc()
+        print(error_details)
+        raise HTTPException(
+            status_code=500, detail=f"{e}. Check console log for details."
+        )
+
+    status_code = 200
+    file_name = "data.ttl"
+
+    if not conforms:
+        status_code = 400
+        file_name = "error_report.ttl"
 
     return Response(
+        status_code=status_code,
         content=turtle_data,
         media_type="text/turtle",
-        headers={"Content-Disposition": "attachment; filename=data.ttl"},
+        headers={"Content-Disposition": f"attachment; filename={file_name}"},
     )
 
 

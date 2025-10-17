@@ -39,7 +39,7 @@ class PlexClient:
     def properties(self) -> List[str]:
         """
         Returns:
-            List[str]: properties for use in graph creation
+            List[str]: List of properties for graph
         """
         return [
             "slug",
@@ -61,20 +61,20 @@ class PlexClient:
         self, section_id: int, account_id: int
     ) -> (pd.DataFrame, pd.DataFrame, pd.DataFrame):
         """
-        Filter properties using the 'properties' property defined in this
-        class, then create additional datasets with unique values for
-        genres and persons.
+        Filter properties using the 'properties' class attribute, then create
+        additional datasets with unique values for genres and persons.
 
-        Appropriate slugs will be added to the values in the latter 2
-        datasets, and then transform the initial values from the main
-        dataset to use the slugs - this is to make it easier to create
-        properties in rdf because the slugs will act as IDs.
+        Appropriate slugs will be added to the values in genres and persons
+        datasets, and then transform the initial values from the main dataset
+        to use the slugs - this is to make it easier to create properties in
+        rdf because the slugs will act as IDs.
 
         Args:
             section_id: int
+            account_id: int
 
         Returns:
-            tuple(genres, persons, all_data)
+            tuple(genres, persons, media_data, history)
         """
         section_data = self._get_section_items(section_id)
         section_metadata = section_data["MediaContainer"]["Metadata"]
@@ -118,7 +118,7 @@ class PlexClient:
 
     def _get(self, path: str) -> pd.DataFrame:
         """
-        Get request template.
+        HTTP GET request template.
 
         Args:
             path: str
@@ -149,13 +149,16 @@ class PlexClient:
         )
 
     def _map_property_slugs(
-        self, property_vals: pd.DataFrame, property_unique_df: pd.DataFrame
+        self, target_column: pd.DataFrame, property_unique_df: pd.DataFrame
     ):
         """
         Map property values to their corresponding slugs.
 
         Args:
-            properties: pd.DataFrame
+            target_column: pd.DataFrame
+            property_unique_df: pd.DataFrame
+                DataFrame containing unique values for target column along with
+                their slugs.
 
         Returns:
             List[str]
@@ -165,11 +168,11 @@ class PlexClient:
             zip(property_unique_df["name"], property_unique_df["slug"])
         )
 
-        if not property_vals:
+        if not target_column:
             return []
         return [
             str(slug_map[g["tag"]])
-            for g in property_vals
+            for g in target_column
             if g.get("tag") in slug_map
         ]
 
@@ -177,7 +180,7 @@ class PlexClient:
         self, df: pd.DataFrame, property_names: List[str]
     ) -> pd.DataFrame:
         """
-        Create unique value pd.DataFrame from a list of columns.
+        Create unique values across a list of columns in a pd.DataFrame.
 
         Args:
             df: pd.DataFrame

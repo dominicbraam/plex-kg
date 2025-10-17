@@ -1,0 +1,100 @@
+@prefix : <http://example.org/shapes#> .
+@prefix sh: <http://www.w3.org/ns/shacl#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix schema: <https://schema.org/> .
+
+:GenrePersonShape a sh:NodeShape ;
+    sh:targetClass schema:genre, schema:Person ;
+    sh:nodeKind sh:IRI ;
+    sh:property [
+        sh:path schema:name ;
+        sh:or (
+            [ sh:datatype xsd:string ]
+            [ sh:datatype rdf:langString ]
+        ) ;
+        sh:minCount 1 ;
+        sh:maxCount 1 ;
+    ] .
+
+:MovieShape a sh:NodeShape ;
+    sh:targetClass schema:Movie ;
+    sh:nodeKind sh:IRI ;
+    sh:property [
+        sh:path schema:name ;
+        sh:minCount 1 ;
+        sh:maxCount 1 ;
+    ] ;
+    sh:property [
+        sh:path schema:genre ;
+        sh:nodeKind sh:IRI ;
+        sh:class schema:genre ;
+        sh:minCount 1 ;
+    ] ;
+    sh:property [
+        sh:path schema:duration ;
+        sh:datatype xsd:integer ;
+        sh:minExclusive 0 ;
+        sh:minCount 1 ;
+        sh:maxCount 1 ;
+    ] ;
+    sh:property [
+        sh:path schema:director ;
+        sh:nodeKind sh:IRI ;
+        sh:class schema:Person ;
+        sh:minCount 1 ;
+    ] ;
+    sh:property [
+        sh:path schema:datePublished ;
+        sh:datatype xsd:date ;
+        sh:minCount 1 ;
+        sh:maxCount 1 ;
+    ] ;
+    sh:property [
+        sh:path schema:contentRating ;
+        sh:node :RatingShape ;
+        sh:maxCount 1 ;
+    ] ;
+    sh:property [
+        sh:path schema:author ;
+        sh:nodeKind sh:IRI ;
+        sh:class schema:Person ;
+    ] ;
+    sh:property [
+        sh:path schema:actor ;
+        sh:nodeKind sh:IRI ;
+        sh:class schema:Person ;
+        sh:minCount 1 ;
+    ] .
+
+:RatingShape a sh:NodeShape ;
+    sh:targetClass schema:Rating ;
+    sh:property [
+        sh:path schema:ratingValue ;
+        sh:datatype xsd:decimal ;
+        sh:minInclusive 0 ;
+        sh:maxInclusive 10 ;
+    ] .
+
+:WatchActionShape a sh:NodeShape ;
+    sh:targetClass schema:WatchAction ;
+    sh:property [
+        sh:path schema:agent ;
+        sh:nodeKind sh:IRI ;
+        sh:class schema:Person ;
+        sh:minCount 1 ;
+        sh:maxCount 1 ;
+    ] ;
+    sh:property [
+        sh:path schema:object ;
+        sh:nodeKind sh:IRI ;
+        sh:class schema:Movie ;
+        sh:minCount 1 ;
+        sh:maxCount 1 ;
+    ] ;
+    sh:property [
+        sh:path schema:startTime ;
+        sh:datatype xsd:date ;
+        sh:minCount 1 ;
+        sh:maxCount 1 ;
+    ] .

@@ -1,0 +1,14 @@
+PREFIX : <https://schema.org/>
+BASE <http://plex-kg/>
+
+SELECT ?movie_name ?genre_name WHERE {
+    ?movie a :Movie ;
+        :name ?movie_name ;
+        :genre ?genre .
+
+    ?genre :name ?genre_name .
+
+    FILTER(CONTAINS(LCASE(STR(?movie_name)), "{movie_name}")) .
+    FILTER(CONTAINS(LCASE(STR(?genre_name)), "{genre_name}")) .
+}
+LIMIT 10

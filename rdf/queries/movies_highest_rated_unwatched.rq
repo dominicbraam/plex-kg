@@ -1,0 +1,16 @@
+PREFIX : <https://schema.org/>
+BASE <http://plex-kg/>
+
+SELECT ?movie ?rating
+WHERE {
+    ?movie a :Movie .
+
+    FILTER NOT EXISTS {
+        ?watch_action a :WatchAction ;
+            :object ?movie .
+    }
+
+    OPTIONAL { ?movie :contentRating/:ratingValue ?rating . }
+}
+ORDER BY DESC(?rating)
+LIMIT 10

@@ -1,0 +1,21 @@
+PREFIX : <https://schema.org/>
+BASE <http://plex-kg/>
+
+SELECT ?recMovie ?rating (COUNT(*) AS ?overlap)
+WHERE {
+    VALUES ?target { <movie/iron-man> }
+
+    ?target a :Movie .
+    ?recMovie a :Movie .
+    OPTIONAL { ?recMovie :contentRating/:ratingValue ?rating . }
+
+    OPTIONAL{ ?target :genre ?g . ?recMovie :genre ?g . }
+    OPTIONAL{ ?target :director ?d . ?recMovie :director ?d . }
+    OPTIONAL{ ?target :author ?au . ?recMovie :author ?au . }
+    OPTIONAL{ ?target :actor ?ac . ?recMovie :actor ?ac . }
+
+    FILTER (?recMovie != ?target)
+}
+GROUP BY ?recMovie ?rating
+ORDER BY DESC(?overlap) DESC(?rating)
+LIMIT 5

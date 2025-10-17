@@ -19,3 +19,4 @@ services:
         env_file: .env
         volumes:
             - ./src:/app/src
+            - ./rdf:/app/rdf
