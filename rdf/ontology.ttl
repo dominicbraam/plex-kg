@@ -1,0 +1,25 @@
+@prefix : <https://schema.org/> .
+@prefix ont:   <http://plex-kg/ontology#> .
+@prefix rdfs:   <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix owl:    <http://www.w3.org/2002/07/owl#> .
+@prefix xsd:    <http://www.w3.org/2001/XMLSchema#> .
+
+ont:Relation a rdfs:Class ;
+    rdfs:label "Relation" ;
+    rdfs:comment "Computed relationship between two media items based on shared features." .
+
+ont:source a owl:ObjectProperty ;
+    rdfs:domain ont:Relation ;
+    rdfs:range :CreativeWork ;
+    rdfs:label "source" .
+
+ont:target a owl:ObjectProperty ;
+    rdfs:domain ont:Relation ;
+    rdfs:range :CreativeWork ;
+    rdfs:label "target" .
+
+ont:overlap a owl:DatatypeProperty ;
+    rdfs:domain ont:Relation ;
+    rdfs:range xsd:integer ;
+    rdfs:label "overlap" ;
+    rdfs:comment "Numeric similarity score based on number of shared attributes." .

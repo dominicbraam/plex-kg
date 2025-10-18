@@ -1,0 +1,28 @@
+@prefix : <http://plex-kg/shape#> .
+@prefix sh: <http://www.w3.org/ns/shacl#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix ont: <http://plex-kg/ontology#> .
+@prefix schema: <https://schema.org/> .
+
+:RelationShape a sh:NodeShape ;
+    sh:targetClass ont:Relation ;
+
+    sh:property [
+        sh:path ont:source ;
+        sh:class schema:Movie ;
+        sh:minCount 1 ;
+        sh:maxCount 1 ;
+    ] ;
+
+    sh:property [
+        sh:path ont:target ;
+        sh:class schema:Movie ;
+        sh:minCount 1 ;
+        sh:maxCount 1 ;
+    ] ;
+
+    sh:property [
+        sh:path ont:overlap ;
+        sh:datatype xsd:integer ;
+        sh:minInclusive 1 ;
+    ] .

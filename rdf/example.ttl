@@ -2,13 +2,14 @@
 @prefix schema: <https://schema.org/> .
 @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
 @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
 @base <http://plex-kg/> .
 
-<genre/action> a schema:genre ;
-    schema:name "Action"@en .
+<genre/action> schema:name "Action"@en .
 
-<genre/science-fiction> a schema:genre ;
-    schema:name "Science Fiction"@en .
+<genre/adventure> schema:name "Adventure"@en .
+
+<genre/science-fiction> schema:name "Science Fiction"@en .
 
 <person/plex-watcher> a schema:Person ;
     schema:name "Plex Watcher"@en .
@@ -20,10 +21,10 @@
     schema:name "Iron Man 2"@en ;
     schema:genre <genre/action>,
         <genre/adventure> ;
-    schema:duration "7474643"^^xsd:duration ;
+    schema:duration "PT2H4M"^^xsd:duration ;
     schema:director <person/jon-favreau> ;
     schema:datePublished "2010-04-28"^^xsd:date ;
-    schema:contentRating [ a schema:Rating ;
+    schema:aggregateRating [ a schema:AggregateRating ;
             schema:ratingValue 7.2 ] ;
     schema:author <person/don-heck>,
         <person/justin-theroux> ;
@@ -33,10 +34,10 @@
 
 <tvseries/GOT> a schema:TVSeries;
     schema:name "Game of Thrones"@en;
-    schema:genre <genre/sci-fi>.
+    schema:genre <genre/science-fiction>.
 
 <tvseries/GOT/ep1> a schema:TVEpisode;
-    schema:partOfTVSeries <tvseries/GOT>;
+    schema:partOfSeries <tvseries/GOT>;
     schema:name "Episode 1"@en;
     schema:director <person/plex-watcher>;
     schema:datePublished "2025-01-01"^^xsd:date.

@@ -63,6 +63,14 @@ SPARQL is used to query RDF datasets. The WHERE clause usually triples (subject,
 
 SHACL is used to describe what the RDF data should look like. It ensures the graph conforms to the expected structures and datatypes. ie. validation.
 
+### RDFS (RDF Schema)
+
+It can be seen as an ontology to write your ontologies, a vocabulary to write your vocabulary, and a schema to describe your schema.
+
+It defines taxonomies through classes and subclass relationships. It provides vocabulary (rdfs:Class, rdfs:subClassOf, rdfs:Property, rdfs:subPropertyOf) for describing hierarchical structures. i.e. taxonomies or ontologies—of resources.
+
+If a property is declared with `rdf:type`, it’s an instance of a class, not a subclass.
+
 ## Taxonomies
 
 A taxonomy is a hierarchical framework, or schema, for the organization of organisms, inanimate objects, events, and/or concepts. We see taxonomies daily as humans, and we don’t give them much thought. Taxonomies are the facets, filters, and search suggestions commonly seen on modern websites.
@@ -107,10 +115,16 @@ The ontology data model can be applied to a set of individual facts to create a 
 
 **Ontology facts:**
 
-- an ontology may allow inferences on data that uses it
-- conceptual graphs can represent an ontology
-- a shared ontology promotes interoperability
-- description logics can represent an ontology
+- An ontology may allow inferences on data that uses it.
+- Conceptual graphs can represent an ontology.
+- A shared ontology promotes interoperability.
+- Description logics can represent an ontology.
+
+**RDFS contains primitives to:**
+
+- Describe classes of resources.
+- Describe types of properties of resources.
+- Document definitions in natural language.
 
 ## Resources
 

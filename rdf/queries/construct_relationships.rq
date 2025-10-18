@@ -1,0 +1,45 @@
+PREFIX : <https://schema.org/>
+PREFIX ont: <http://plex-kg/ontology#>
+BASE <http://plex-kg/>
+
+DROP GRAPH <relations> ;
+
+INSERT {
+    GRAPH <relations> {
+        ?rel a ont:Relation ;
+            ont:source ?m1 ;
+            ont:target ?m2 ;
+            ont:overlap ?overlap .
+        ?m1 :relatedLink ?m2 .
+        ?m2 :relatedLink ?m1 .
+    }
+}
+WHERE {
+    {
+        SELECT ?m1 ?m2 (COUNT(?g)+COUNT(?d)+COUNT(?au)+COUNT(?ac) AS ?overlap)
+        WHERE {
+            ?m1 a :Movie .
+            ?m2 a :Movie .
+            FILTER(?m1 != ?m2)
+            FILTER(STR(?m1) < STR(?m2))
+
+            OPTIONAL { ?m1 :genre ?g . ?m2 :genre ?g . }
+            OPTIONAL { ?m1 :director ?d . ?m2 :director ?d . }
+            OPTIONAL { ?m1 :author ?au . ?m2 :author ?au . }
+            OPTIONAL { ?m1 :actor ?ac . ?m2 :actor ?ac . }
+        }
+        GROUP BY ?m1 ?m2
+        HAVING(?overlap > 0)
+    }
+
+    BIND(
+        IRI(
+            CONCAT(
+                "http://plex-kg/relation/",
+                REPLACE(STR(?m1), "^.*/", ""),
+                "-",
+                REPLACE(STR(?m2), "^.*/", "")
+            )
+        ) AS ?rel
+    )
+}

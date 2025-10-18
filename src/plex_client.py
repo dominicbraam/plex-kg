@@ -3,7 +3,7 @@ import os
 import re
 import requests
 import pandas as pd
-from typing import List
+from typing import Dict, List
 
 
 class PlexClient:
@@ -12,18 +12,24 @@ class PlexClient:
 
     Attributes:
         protocol: str
-        host: str - Plex IP or URL
-        port: int - Plex port (default is 32400)
-        client_identifier: str - (X-Plex-Client-Identifier) randomly generated
-        token: str - X-Plex-Token
-        base: str - full Plex server URL
+            Default is 'http'
+        host: str
+            Plex IP or URL
+        port: int
+            Default is 32400
+        client_identifier: str
+            (X-Plex-Client-Identifier) randomly generated
+        token: str
+            X-Plex-Token
+        base: str
+            Plex server URL
         headers: Dict
     """
 
     def __init__(self):
-        self.protocol = "http"
+        self.protocol = os.getenv("PLEX_PROTOCOL", "http")
         self.host = os.getenv("PLEX_URL")
-        self.port = 32400
+        self.port = os.getenv("PLEX_PORT", 32400)
         self.client_identifier = os.getenv("PLEX_CLIENT_ID")
         self.token = os.getenv("PLEX_TOKEN")
         self.base = f"{self.protocol}://{self.host}:{self.port}"
@@ -59,7 +65,7 @@ class PlexClient:
 
     def create_structured_datasets(
         self, section_id: int, account_id: int
-    ) -> (pd.DataFrame, pd.DataFrame, pd.DataFrame):
+    ) -> (pd.DataFrame, pd.DataFrame, pd.DataFrame, pd.DataFrame):
         """
         Filter properties using the 'properties' class attribute, then create
         additional datasets with unique values for genres and persons.
@@ -116,7 +122,7 @@ class PlexClient:
 
         return genre_df, person_df, structured_df, history_df
 
-    def _get(self, path: str) -> pd.DataFrame:
+    def _get(self, path: str) -> Dict:
         """
         HTTP GET request template.
 
@@ -124,24 +130,23 @@ class PlexClient:
             path: str
 
         Returns:
-            pd.DataFrame: result from get request.
+            Dict: result from get request.
         """
         url = f"{self.base}{path}"
         result = requests.get(url, headers=self.headers, timeout=10)
         result.raise_for_status()
 
-        data = json.loads(result.text)
-        return pd.DataFrame(data)
+        return json.loads(result.text)
 
-    def _get_libraries(self):
+    def _get_libraries(self) -> Dict:
         return self._get("/library/sections")
 
     # turns out that /all gets all movie data and:
     #   - /library/sections/{section_key}/genre -> all genres in section
     #   - /library/sections/{section_key}/director -> all directors in section
     #   - etc.
-    def _get_section_items(self, section_key):
-        return self._get(f"/library/sections/{section_key}/all")
+    def _get_section_items(self, section_id: int) -> Dict:
+        return self._get(f"/library/sections/{section_id}/all")
 
     def _get_playback_history(self, section_id: int, account_id: int):
         return self._get(

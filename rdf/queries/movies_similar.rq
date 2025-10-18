@@ -7,7 +7,7 @@ WHERE {
 
     ?target a :Movie .
     ?recMovie a :Movie .
-    OPTIONAL { ?recMovie :contentRating/:ratingValue ?rating . }
+    OPTIONAL { ?recMovie :aggregateRating/:ratingValue ?rating . }
 
     OPTIONAL{ ?target :genre ?g . ?recMovie :genre ?g . }
     OPTIONAL{ ?target :director ?d . ?recMovie :director ?d . }

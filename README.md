@@ -1,6 +1,6 @@
 # Plex Knowledge Graph
 
-Plex KG transforms Plex media data into a connected web of knowledge, showing how the data can be linked, queried, and understood semantically.
+Plex KG builds a knowledge graph from Plex media data, linking movies, genres, and people through semantic relationships. It enables querying and simple recommendations.
 
 ## Tools
 
@@ -44,10 +44,13 @@ docker compose up
 
 **Run queries using fuseki API:**
 
+> [!NOTE]
+> The docker compose automagically creates a dataset called 'plex' and will be used as the dataset throughout the project.
+
 ```bash
 curl POST \
     --data-urlencode "query@{path-to-rq-file}" \
-    http://localhost:3030/{dataset-name}/query | jq
+    http://localhost:3030/plex/query | jq
 ```
 
 - If it's saying unauthorized, use curl's -u parameter: `curl -u user:pw ...`
