@@ -3,7 +3,10 @@
 @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
 @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
 @prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix ont: <http://plex-kg/ontology#>
 @base <http://plex-kg/> .
+
+# GRAPH 1: Main movie data
 
 <genre/action> schema:name "Action"@en .
 
@@ -46,3 +49,11 @@
     schema:agent <person/plex-watcher> ;
     schema:object <movie/iron-man-2> ;
     schema:startTime "2022-12-25"^^xsd:date .
+
+
+# GRAPH 2: Relationships
+
+<relation/ant-man-skyfall> a ont:Relation ;
+    ont:source <movie/ant-man> ;
+    ont:target <movie/skyfall> ;
+    ont:overlap "2"^^xsd:integer ;

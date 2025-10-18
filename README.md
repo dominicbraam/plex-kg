@@ -13,7 +13,15 @@ Plex KG builds a knowledge graph from Plex media data, linking movies, genres, a
 
 1. Get data from Plex.
 2. Transform Plex data to a graph in the Turtle format.
-3. Validate graph against expected shape: `./rdf/shape.ttl`.
+3. Create media relationship graph.
+4. Validate graphs against expected shapes in: `./rdf/shapes/`.
+5. Upload graphs fuseki.
+
+> [!NOTE]
+> The docker compose automagically creates a dataset called 'plex' and will be used as the dataset throughout the project.
+> You can view the graphs in fuseki or download them.
+> If you'd like to see an example graph, you can check out `./rdf/example.ttl`. That file has example nodes for the media graph and relationship graph.
+> Additionally, `./rdf/ontology.ttl` adds to the existing schema.org ontology.
 
 ## Setup
 
@@ -44,9 +52,6 @@ docker compose up
 
 **Run queries using fuseki API:**
 
-> [!NOTE]
-> The docker compose automagically creates a dataset called 'plex' and will be used as the dataset throughout the project.
-
 ```bash
 curl POST \
     --data-urlencode "query@{path-to-rq-file}" \
@@ -55,6 +60,9 @@ curl POST \
 
 - If it's saying unauthorized, use curl's -u parameter: `curl -u user:pw ...`
 - If you get an error saying that the URL doesn't support POST requests, ensure that the dataset name is correct.
+
+> [!NOTE]
+> If you'd like to see the queries being run in the project, you can find them in `./rdf/queries/`.
 
 ## Limitations
 
