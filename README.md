@@ -6,6 +6,7 @@ Plex KG builds a knowledge graph from Plex media data, linking movies, genres, a
 
 - **PlexAPI**: collect Plex data.
 - **rdflib**: extract/map Plex data to turtle only. Doesn't handle large graphs well because it runs in memory.
+- **pyshacl**: validate graphs.
 - **Fuseki**: handle RDF storage, query and reasoning.
 - **FastAPI**: easily access user facing functions.
 
