@@ -19,7 +19,7 @@ def get_plex_libraries() -> Dict:
 
 
 @router.get("/library/section/{section_id}")
-def get_plex_sections(section_id: int) -> Dict:
+def get_plex_section(section_id: int) -> Dict:
     """
     Get the first 3 items in a Plex section.
     A plex section is locked to a content type like movies, tv shows, etc.

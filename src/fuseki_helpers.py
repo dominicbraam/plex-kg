@@ -61,18 +61,33 @@ def _post(path: str, data: str) -> Dict:
     return json.loads(result.text)
 
 
-def run_query(query_name: str) -> Dict:
+def run_query(query_name: str, replacement: str = "") -> Dict:
+    """
+    Run predefined SPARQL query.
+    If the query supports it, you can replace that area in the query
+    with your value.
 
+    Args:
+        query_name: str
+            Based off of query file, without the extension.
+        replacement: str
+
+    Returns:
+        Dict
+    """
     query_path = f"/app/rdf/queries/{query_name}.rq"
     with open(query_path) as f:
         file_contents = f.read()
     f.close()
 
-    query = file_contents
+    if replacement:
+        query = file_contents.replace("___replace___", replacement)
+    else:
+        query = file_contents
 
     data = {"query": query}
-
     result = _post("/query", data)
+
     return result
 
 
