@@ -1,0 +1,32 @@
+PREFIX : <https://schema.org/>
+PREFIX ont: <http://plex-kg/ontology#>
+BASE <http://plex-kg/>
+
+SELECT ?recommendation ?overlap ?rating
+WHERE {
+    GRAPH <http://plex-kg/relations> {
+        {
+            ?s a ont:Relation ;
+            ont:source <___replace___> ;
+            ont:target ?recommendation ;
+            ont:overlap ?overlap .
+        }
+        UNION
+        {
+            ?s a ont:Relation ;
+            ont:source ?recommendation ;
+            ont:target <___replace___> ;
+            ont:overlap ?overlap .
+        }
+    }
+
+    FILTER EXISTS {
+        ?watch_action a :WatchAction ;
+        :object ?recommendation .
+    }
+
+    ?recommendation :aggregateRating/:ratingValue ?rating .
+}
+GROUP BY ?recommendation ?overlap ?rating
+ORDER BY DESC(?overlap) DESC(?rating)
+LIMIT 10

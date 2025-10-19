@@ -10,7 +10,7 @@ WHERE {
             :object ?movie .
     }
 
-    OPTIONAL { ?movie :contentRating/:ratingValue ?rating . }
+    OPTIONAL { ?movie :aggregateRating/:ratingValue ?rating . }
 }
 ORDER BY DESC(?rating)
 LIMIT 10

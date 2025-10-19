@@ -1,14 +1,26 @@
 PREFIX : <https://schema.org/>
 BASE <http://plex-kg/>
 
-SELECT ?movie_name ?genre_name WHERE {
+SELECT
+    ?movie_name
+    (GROUP_CONCAT(DISTINCT ?genre_name; separator=", ") AS ?genres)
+    ?date
+    ?rating
+    (COUNT(?watch_date) as ?watch_count)
+WHERE {
     ?movie a :Movie ;
         :name ?movie_name ;
-        :genre ?genre .
+        :genre ?genre ;
+        :datePublished ?date ;
+        :aggregateRating/:ratingValue ?rating .
 
     ?genre :name ?genre_name .
 
-    FILTER(CONTAINS(LCASE(STR(?movie_name)), "{movie_name}")) .
-    FILTER(CONTAINS(LCASE(STR(?genre_name)), "{genre_name}")) .
+    ?watch_action a :WatchAction ;
+        :object ?movie ;
+        :startTime ?watch_date .
+
+    FILTER(CONTAINS(LCASE(STR(?movie_name)), "___replace___")) .
 }
+GROUP BY ?movie_name ?date ?rating
 LIMIT 10

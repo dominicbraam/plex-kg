@@ -9,8 +9,8 @@ WHERE {
         :object ?movie ;
         :startTime ?watch_date .
 
-    OPTIONAL { ?movie :contentRating/:ratingValue ?rating . }
+    OPTIONAL { ?movie :aggregateRating/:ratingValue ?rating . }
 }
 GROUP BY ?movie ?rating
 ORDER BY DESC(?watch_count) DESC(?rating)
-LIMIT 1
+LIMIT 10
