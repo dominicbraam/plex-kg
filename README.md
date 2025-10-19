@@ -72,6 +72,8 @@ If you would like to see the available Plex sections, you can use the FastAPI en
 
 Another major limitation is that I did not implement any error handling... 😅 I just didn't feel like, lol. You can check docker logs to help clear any blockers you might have.
 
+Oh, and no OWL...
+
 ## Resources
 
 - [Plex Media Server API](https://developer.plex.tv/)
